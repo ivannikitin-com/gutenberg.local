@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.preferredLightColorTheme": "Default Dark+",
+		"window.autoDetectColorScheme": true,
+		"workbench.colorTheme": "Default Dark+",
+		"cSpell.words": [
+			"blocksy"
+		]
+	}
+}
