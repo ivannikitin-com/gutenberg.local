@@ -1,1 +1,7 @@
-/updraft/*
+# Бекапы в git не копируем
+/updraft/*.zip
+/updraft/*.gz
+/updraft/*.txt
+
+# Личные учетки
+*.login

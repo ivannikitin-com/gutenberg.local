@@ -12,26 +12,30 @@ services:
       - dbdata:/var/lib/mysql
     command: '--default-authentication-plugin=mysql_native_password'
     networks:
-      - app-network
+      - gutenberg-network
     ports:
       - "3306:3306"
 
   wordpress:
     depends_on:
       - db
-    image: wordpress:5.1.1-fpm-alpine
+    image: wordpress:php7.4-fpm-alpine
     container_name: wordpress
     restart: unless-stopped
-    env_file: .env
-    environment:
-      - WORDPRESS_DB_HOST=db:3306
-      - WORDPRESS_DB_USER=$MYSQL_USER
-      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
-      - WORDPRESS_DB_NAME=$MYSQL_DB
+    # Настройка в локльном файле .conf/wordpress/wp-config.php
     volumes:
-      - site_root:/var/www/html  
+      - site_root:/var/www/html
+      - ./.conf/php/php.ini:/usr/local/etc/php/php.ini
+      - ./.conf/wordpress/wp-config.php:/var/www/html/wp-config.php
+      - ./.conf/php/test.php:/var/www/html/test.php
+      - ./updraft:/var/www/html/wp-content/updraft
+      - ./themes/blockbase:/var/www/html/wp-content/themes/blockbase
+      - ./themes/blocksy:/var/www/html/wp-content/themes/blocksy
+      - ./plugins/gutenberg:/var/www/html/wp-content/plugins/gutenberg
+      - ./plugins/qubely:/var/www/html/wp-content/plugins/qubely
+      - ./plugins/wpsitesynccontent:/var/www/html/wp-content/plugins/wpsitesynccontent
     networks:
-      - app-network
+      - gutenberg-network
 
   nginx:
     depends_on:
@@ -43,17 +47,24 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - site_root:/var/www/html
       - ./.conf/nginx:/etc/nginx/conf.d
       - ./.conf/ssl/cert.pem:/etc/nginx/cert.pem
-      - ./.conf/ssl/server.key:/etc/nginx/server.key  
-      - site_root:/var/www/html 
+      - ./.conf/ssl/server.key:/etc/nginx/server.key 
+      - ./.conf/php/test.php:/var/www/html/test.php
+      - ./updraft:/var/www/html/wp-content/updraft
+      - ./themes/blockbase:/var/www/html/wp-content/themes/blockbase
+      - ./themes/blocksy:/var/www/html/wp-content/themes/blocksy
+      - ./plugins/gutenberg:/var/www/html/wp-content/plugins/gutenberg
+      - ./plugins/qubely:/var/www/html/wp-content/plugins/qubely
+      - ./plugins/wpsitesynccontent:/var/www/html/wp-content/plugins/wpsitesynccontent      
     networks:
-      - app-network
+      - gutenberg-network
 
 volumes:
-  site_root:
   dbdata:
+  site_root:
 
 networks:
-  app-network:
+  gutenberg-network:
     driver: bridge

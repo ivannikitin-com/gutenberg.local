@@ -9,6 +9,7 @@
 		"window.autoDetectColorScheme": true,
 		"workbench.colorTheme": "Default Dark+",
 		"cSpell.words": [
+			"Blockbase",
 			"blocksy"
 		]
 	}
